@@ -21,39 +21,44 @@ async function newsRequest() {
     }
 }
 
-function discordPush(content) {
+function discordPush(story) {
+    // randomize the color of each embed
+    var options = {
+        method: 'POST',
+        url: process.env.WEBHOOK,
+        headers: {
+            "Content-Type": "application/json"
+        },
+        data :{
+            "embeds": [
+                {
+                "title": story.title,
+                "description": story.summary,
+                "url": story.link,
+                "color": Math.floor(Math.random()*16777215),
+                "image": {
+                    url: story.media,
+                },
+                "author": {
+                    "name": story.clean_url,
+                }
+            }]
+        }
+    }
+    axios(options);
+}
+
+function runLoop(content) {
     var articles = content.articles
     for(var index in articles) {
+        // push out an article every 5 minutes
         var story = articles[index];
-        // randomize the color of each embed
-        var options = {
-            method: 'POST',
-            url: process.env.WEBHOOK,
-            headers: {
-                "Content-Type": "application/json"
-            },
-            data :{
-                "embeds": [
-                    {
-                    "title": story.title,
-                    "description": story.summary,
-                    "url": story.link,
-                    "color": Math.floor(Math.random()*16777215),
-                    "image": {
-                        url: story.media,
-                    },
-                    "author": {
-                        "name": story.clean_url,
-                    }
-                }]
-            }
-        }
-        axios(options);
+        setTimeout(discordPush, 300000, story);
     }
 }
 
 function refreshNews() {
-    newsRequest().then(discordPush);
+    newsRequest().then(runLoop);
 }
 
 console.log('NewsBot is up and running');
