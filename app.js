@@ -23,6 +23,7 @@ async function newsRequest() {
 
 function discordPush(story) {
     // randomize the color of each embed
+    console.log("dropping a spicy article now")
     var options = {
         method: 'POST',
         url: process.env.WEBHOOK,
@@ -36,7 +37,7 @@ function discordPush(story) {
                 "description": story.summary,
                 "url": story.link,
                 "color": Math.floor(Math.random()*16777215),
-                "image": {
+                "thumbnail": {
                     url: story.media,
                 },
                 "author": {
@@ -51,9 +52,9 @@ function discordPush(story) {
 function runLoop(content) {
     var articles = content.articles
     for(var index in articles) {
-        // push out an article every 5 minutes
+        // push out an article every 15 minutes
         var story = articles[index];
-        setTimeout(discordPush, 300000*index, story);
+        setTimeout(discordPush, 900000*index, story);
     }
 }
 
@@ -63,5 +64,5 @@ function refreshNews() {
 
 console.log('NewsBot is up and running');
 refreshNews();
-// refresh news every hour
-setInterval(refreshNews, "3.6e+6")
+// refresh news every 1.25 hour
+setInterval(refreshNews, 4500000)
