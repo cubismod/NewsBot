@@ -53,7 +53,7 @@ function runLoop(content) {
     for(var index in articles) {
         // push out an article every 5 minutes
         var story = articles[index];
-        setTimeout(discordPush, 300000, story);
+        setTimeout(discordPush, 300000*index, story);
     }
 }
 
@@ -64,4 +64,4 @@ function refreshNews() {
 console.log('NewsBot is up and running');
 refreshNews();
 // refresh news every hour
-setTimeout(refreshNews, "3.6e+6")
+setInterval(refreshNews, "3.6e+6")
