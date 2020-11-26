@@ -5,11 +5,11 @@ require('dotenv').config();
 async function newsRequest() {
     var options = {
         method: 'GET',
-        url: 'https://newscatcher.p.rapidapi.com/v1/latest_headlines',
-        params: {topic: 'politics', lang: 'en', country: 'us', media: 'True'},
+        url: 'https://google-news.p.rapidapi.com/v1/topic_headlines',
+        params: {lang: 'en', country: 'us', topic: 'NATION'},
         headers: {
             'x-rapidapi-key': process.env.NEWSTOK,
-            'x-rapidapi-host': 'newscatcher.p.rapidapi.com'
+            'x-rapidapi-host': 'google-news.p.rapidapi.com'
         }
     };
     try {
@@ -34,14 +34,10 @@ function discordPush(story) {
             "embeds": [
                 {
                 "title": story.title,
-                "description": story.summary,
                 "url": story.link,
                 "color": Math.floor(Math.random()*16777215),
-                "thumbnail": {
-                    url: story.media,
-                },
                 "author": {
-                    "name": story.clean_url,
+                    "name": story.source.title,
                 }
             }]
         }
@@ -52,9 +48,9 @@ function discordPush(story) {
 function runLoop(content) {
     var articles = content.articles
     for(var index in articles) {
-        // push out an article every 15 minutes
+        // push out an article every 20 minutes
         var story = articles[index];
-        setTimeout(discordPush, 900000*index, story);
+        setTimeout(discordPush, 1.2e+6*index, story);
     }
 }
 
@@ -64,5 +60,5 @@ function refreshNews() {
 
 console.log('NewsBot is up and running');
 refreshNews();
-// refresh news every 1.25 hour
-setInterval(refreshNews, 4500000)
+// refresh news every 6 hours
+setInterval(refreshNews, 2.16e+7)
