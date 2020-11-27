@@ -2,7 +2,7 @@
   "name": "newsbot",
   "version": "1.0.0",
   "description": "A Discord bot for automatically sending the latest news.",
-  "main": "index.js",
+  "main": "app.js",
   "dependencies": {
     "axios": "^0.21.0",
     "discord.js": "^12.4.1",

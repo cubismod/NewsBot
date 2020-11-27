@@ -48,9 +48,15 @@ function discordPush(story) {
 function runLoop(content) {
     var articles = content.articles
     for(var index in articles) {
-        // push out an article every 20 minutes
         var story = articles[index];
-        setTimeout(discordPush, 1.2e+6*index, story);
+        if(story.source.title.includes("fox") || story.source.title.includes("Fox")) {
+            console.log("ignoring fox news article")
+            console.log(story.title)
+        }
+        else {
+            // push out an article every 20 minutes
+            setTimeout(discordPush, 1.2e+6*index, story);
+        }
     }
 }
 
