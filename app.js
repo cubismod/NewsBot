@@ -1,70 +1,68 @@
 // Copyright 2020 cubis
-var axios = require('axios').default;
+const axios = require('axios').default;
 require('dotenv').config();
 
 async function newsRequest() {
-    var options = {
-        method: 'GET',
-        url: 'https://google-news.p.rapidapi.com/v1/topic_headlines',
-        params: {lang: 'en', country: 'us', topic: 'NATION'},
-        headers: {
-            'x-rapidapi-key': process.env.NEWSTOK,
-            'x-rapidapi-host': 'google-news.p.rapidapi.com'
-        }
-    };
-    try {
-        const response = await axios.request(options);
-        console.log(response.data);
-        return response.data;
-    } catch(error) {
-        console.log(error);
-    }
+	const options = {
+		method: 'GET',
+		url: 'https://google-news.p.rapidapi.com/v1/topic_headlines',
+		params: { lang: 'en', country: 'us', topic: 'NATION' },
+		headers: {
+			'x-rapidapi-key': process.env.NEWSTOK,
+			'x-rapidapi-host': 'google-news.p.rapidapi.com',
+		},
+	};
+	try {
+		const response = await axios.request(options);
+		return response.data;
+	}
+	catch(error) {
+		console.error(error);
+	}
 }
 
 function discordPush(story) {
-    // randomize the color of each embed
-    console.log("dropping a spicy article now")
-    var options = {
-        method: 'POST',
-        url: process.env.WEBHOOK,
-        headers: {
-            "Content-Type": "application/json"
-        },
-        data :{
-            "embeds": [
-                {
-                "title": story.title,
-                "url": story.link,
-                "color": Math.floor(Math.random()*16777215),
-                "author": {
-                    "name": story.source.title,
-                }
-            }]
-        }
-    }
-    axios(options);
+	// randomize the color of each embed
+	console.log(`publishing article ${story.title}`);
+	const options = {
+		method: 'POST',
+		url: process.env.WEBHOOK,
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		data :{
+			'embeds': [
+				{
+					'title': story.title,
+					'url': story.link,
+					'color': Math.floor(Math.random() * 16777215),
+					'author': {
+						'name': story.source.title,
+					},
+				}],
+		},
+	};
+	axios(options);
 }
 
 function runLoop(content) {
-    var articles = content.articles
-    for(var index in articles) {
-        var story = articles[index];
-        if(story.source.title.includes("fox") || story.source.title.includes("Fox")) {
-            console.log("ignoring fox news article")
-            console.log(story.title)
-        }
-        else {
-            // push out an article every 20 minutes
-            setTimeout(discordPush, 1.2e+6*index, story);
-        }
-    }
+	const articles = content.articles;
+	articles.forEach((val, index) => {
+		const story = val;
+		if(story.source.title.includes('fox') || story.source.title.includes('Fox News')) {
+			console.log(`ignoring article ${story.title}`);
+		}
+		else {
+			setTimeout(discordPush, 120000 * index, story);
+		}
+	});
 }
 
 function refreshNews() {
-    newsRequest().then(runLoop);
+	newsRequest().then(runLoop);
 }
 
 console.log('NewsBot is up and running');
 refreshNews();
 // refresh news every 6 hours
-setInterval(refreshNews, 2.16e+7)
+setInterval(refreshNews, 2.16e+7);
