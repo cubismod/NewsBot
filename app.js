@@ -1,5 +1,6 @@
 // Copyright 2020 cubis
 const axios = require('axios').default;
+const pand = require('pandemonium');
 require('dotenv').config();
 
 async function newsRequest() {
@@ -47,13 +48,15 @@ function discordPush(story) {
 
 function runLoop(content) {
 	const articles = content.articles;
-	articles.forEach((val, index) => {
+	articles.forEach(val => {
 		const story = val;
 		if(story.source.title.includes('fox') || story.source.title.includes('Fox News')) {
 			console.log(`ignoring article ${story.title}`);
 		}
 		else {
-			setTimeout(discordPush, 120000 * index, story);
+			// choose a minute then convert to ms
+			const sendTime = pand.choice(1, 360);
+			setTimeout(discordPush, sendTime * 6000, story);
 		}
 	});
 }

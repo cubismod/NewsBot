@@ -1,13 +1,14 @@
 {
   "name": "newsbot",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A Discord bot for automatically sending the latest news.",
   "main": "app.js",
   "dependencies": {
-    "axios": "^0.21.0",
+    "axios": "^0.21.1",
     "discord.js": "^12.4.1",
     "dotenv": "^8.2.0",
-    "eslint": "^7.13.0"
+    "eslint": "^7.13.0",
+    "pandemonium": "^2.0.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
