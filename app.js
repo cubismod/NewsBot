@@ -55,7 +55,7 @@ function runLoop(content) {
 		}
 		else {
 			// choose a minute then convert to ms
-			const sendTime = pand.choice(1, 360);
+			const sendTime = pand.random(1, 360);
 			setTimeout(discordPush, sendTime * 6000, story);
 		}
 	});
