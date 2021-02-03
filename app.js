@@ -24,7 +24,7 @@ async function newsRequest() {
 
 function discordPush(story) {
 	// randomize the color of each embed
-	console.log(`publishing article ${story.title}`);
+	console.log(`publishing article: "${story.title}"`);
 	const options = {
 		method: 'POST',
 		url: process.env.WEBHOOK,
